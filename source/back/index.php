@@ -6,19 +6,32 @@
     <head>
         <title>ผู้ดูแลระบบ</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <script type="text/javascript" src="../../js/jquery-1.9.1.js"></script>
-        <script type="text/javascript" src="../../js/jquery.ui.dialog.js"></script>
-        <script type="text/javascript" src="../../js/jquery-ui.min.js"></script>
+
         <link rel="stylesheet" href="../../css/style.css" type="text/css"/>
 
         <link rel="stylesheet" href="../../bootstrap/dist/css/bootstrap.css"/>
         <link rel="stylesheet" href="../../bootstrap/dist/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="../../datatables/dataTables.css"/>
         <link rel="stylesheet" href="../../css/jquery-ui.css"/>
 
+        <script type="text/javascript" src="../../js/jquery-1.10.2.min.js"></script>
+
+        <script type="text/javascript" src="../../js/jquery-1.9.1.js"></script>
+        <script type="text/javascript" src="../../js/jquery-ui.min.js"></script>
+
         <script type="text/javascript" src="../../bootstrap/js/dropdown.js"></script>
+
+        <script type="text/javascript" src="../../datatables/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="../../datatables/jquery-DT-pagination.js"></script>
+        <script type="text/javascript" src="../../js/stuScript.js"></script>
+
+
     </head>
     <body style="margin-top: 30px">
-        <div style="margin: 0 auto;width: 1280px;">
+        <div style="padding-left: 50px;padding-right: 50px;">
+            <div class="jumbotron">
+                <h1>ส่วน ผู้ดูแลระบบ ร้านถ่ายภาพ</h1>
+            </div>
             <div class="panel panel-success">
                 <div class="panel-heading">
                     <?php

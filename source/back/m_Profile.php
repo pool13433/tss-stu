@@ -1,9 +1,9 @@
-<div class="box_header">
-    <span>ข้อมูลผู้เข้าใช้งานระบบ</span>
-</div>
-<div class="box_body">
-    ชื่อ <br/>
-    นามสกุล <br/>
-    สถานะ <br/>
-    
+<div class="panel panel-info">
+    <div class="panel-heading">ข้อมูลผู้เข้าใช้งานระบบ</div>
+    <div class="panel-body">
+        ชื่อ <br/>
+        นามสกุล <br/>
+        สถานะ <br/>
+    </div>
+    <div class="panel-footer"></div>
 </div>

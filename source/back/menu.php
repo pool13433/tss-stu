@@ -25,15 +25,23 @@
             <li><a href="index.php?page=l">สถานที่</a></li>
             <li class="divider"></li>
             <li><a href="index.php?page=b">ธนาคาร</a></li>
+            <li><a href="index.php?page=img">อัลบัมรูป</a></li>
+            <li class="divider"></li>
+        </ul>
+    </li>
+    <li class="dropdown">
+        <a href="#" data-toggle="dropdown" class="dropdown-toggle">การค้า <b class="caret"></b></a>
+        <ul class="dropdown-menu">
             <li><a href="index.php?page=od">ใบจองการถ่าย</a></li>
             <li><a href="index.php?page=pm">การชำระเงิน</a></li>
-            <li><a href="index.php?page=img">อัลบัมรูป</a></li>
             <li class="divider"></li>
             <li><a href="#">Settings</a></li>
         </ul>
     </li>
-    <li class="dropdown pull-right">
-        <a href="#" onclick="return logout();" data-toggle="dropdown" class="dropdown-toggle">ออกระบบ</a>        
+    <li class="navbar-right">
+        <button onclick="return logout();" class="btn btn-danger">
+            <i class="glyphicon glyphicon-log-out"></i> ออกระบบ
+        </button>
     </li>
 </ul>
 <script type="text/javascript">

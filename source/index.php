@@ -23,6 +23,9 @@
     </head>
     <body style="margin-top: 30px">
         <div style="padding-left:100px;padding-right: 100px;">
+            <div class="jumbotron">
+                <h1>ร้านถ่ายภาพ ออนไลน์</h1>
+            </div>
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <?php include './Menu_top.php'; ?>
