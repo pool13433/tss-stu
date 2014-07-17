@@ -1,0 +1,194 @@
+/* 
+    Document   : style
+    Created on : Jan 9, 2014, 11:07:33 PM
+    Author     : poon__000
+    Description:
+        Purpose of the stylesheet follows.
+
+        class table 
+        ;table 
+        ;table-striped
+        ;table table-bordered
+        ;table table-hover
+*/
+
+.div_footer{
+    height: 150px;   
+}
+.div_body{
+    margin: auto;
+    margin-left: 30px;
+    margin-right: 30px;
+    margin-top: 50px;
+    width: 90%;
+}
+.div_header{
+    height: 150px;    
+
+}
+.box {
+    border: #000000 1px solid;
+}
+.box_title{
+    background-color: gold;
+    border-bottom: 5px #0000FF solid;
+    padding: 10px;
+    color: black;
+    font-size: 18px;
+}
+.box_header {
+    background-color: #0069D6;
+    padding: 10px;
+    color: white;
+    font-weight: bold;
+    text-align: left;
+    border-bottom: 5px tomato solid;
+}
+.box_body {
+    padding: 10px;
+    border: 3px violet solid;
+}
+
+.box_footer{
+    background-color: oldlace;
+    padding: 10px;
+    color: white;
+}
+.box_menu_header{
+    background-color: orange;
+    border-bottom: 5px tomato solid;
+    padding: 10px;
+    /*    border: 3px violet solid;*/
+    font-weight: bold;
+    font-size: 20px;
+}
+.box_menu_body{
+    background-color: mistyrose;
+    padding: 10px;
+    /*    border: 3px violet solid;*/
+}
+
+/*set table mainpage*/
+#top{
+    height: 200px;
+    text-align: center;
+    vertical-align: middle;
+}
+#left-menu{
+
+}
+#content{
+
+}
+#footer{
+    height: 100px;
+    text-align: center;
+}
+
+/*show list data table*/
+
+.img-style{
+    width: 100px;
+    height: 100px;
+    text-align: center;
+
+}
+
+.box_small{
+    height: 40px;
+    background-color: floralwhite;
+    border-bottom: 1px salmon solid;
+    padding: 10px;
+    vertical-align: middle;
+    font-size: large;
+    font-family: monospace;
+
+}
+.box_menu_top{
+    border-top: 5px red solid;
+    border-bottom: 5px red solid;
+}
+
+.box_img{
+    width: 200px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    
+}
+.box_img-header{
+    border-bottom: 3px blue solid;
+    text-align: center;
+    background-color: #39b3d7;
+    color: #ffffff;
+    font-size: 18px;
+    font-family: sans-serif;
+}
+.box_img-body{
+   padding-top: 10px;
+   padding-bottom: 5px;
+   text-align: center;
+   border-bottom : 2px red solid;
+}
+.box_img-footer{
+    padding-top: 5px;
+    text-align: center;
+    
+}
+.box_img-body img{
+    width: 90%;
+    height: 90%;
+    border-radius: 25px;
+    background-color: #d9edf7;
+}
+
+input,select:required {
+    background:hsl(180, 50%, 90%);
+    border:1px solid #999;
+}
+textarea:required {
+    background:hsl(180, 50%, 90%);
+    border:1px solid #999;
+}
+input,select:optional {
+    background:hsl(300, 50%, 90%);
+    border:1px dotted hsl(180, 50%, 90%);
+}
+input:valid,
+input,select:in-range {
+    background:hsl(120, 50%, 90%);
+    border-color:hsl(120, 50%, 50%);
+}
+
+input:invalid,
+input,select:out-of-range {
+    border-color:hsl(0, 50%, 50%);
+    background:hsl(0, 50%, 90%);
+}
+
+textArea:invalid{
+    border-color:hsl(0, 50%, 50%);
+    background:hsl(0, 50%, 90%);
+}
+fieldset{
+    
+}
+fieldset legend{
+    font-size: 25px;
+}
+.help {
+    display:none;
+    font-size:90%;
+}
+input:focus + .help {
+    display:inline-block;
+}
+
+.li_post{
+    
+}
+.li_comment{
+    padding: 5px;
+    border-bottom: 1px red solid;
+}
