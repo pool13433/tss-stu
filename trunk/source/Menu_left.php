@@ -7,7 +7,7 @@
             <li><a href="index.php?page=r">
                     <i class="glyphicon glyphicon-user"></i> ลงทะเบียน</a></li>
             <li><a href="index.php?page=p">
-                    <i class="glyphicon glyphicon-gift"></i> สินค้า</a></li>
+                    <i class="glyphicon glyphicon-gift"></i> สินค้า <span class="badge alert-danger">42 ชิ้น</span></a></li>
             <li><a href="index.php?page=o">
                     <i class="glyphicon glyphicon-folder-open"></i> รูปแบบบริการ</a></li>
             <li><a></a></li>
