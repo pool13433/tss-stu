@@ -22,13 +22,13 @@ if (!empty($_GET['id'])) {
                 <label class="col-sm-2 label-rigth" for="">ชื่อ</label>
                 <div class="col-sm-3">
                     <input type="hidden" class="form-control" name="id" value="<?= $id ?>"/>
-                    <input type="text" class="form-control" name="l_name" value="<?= $name ?>" required/>
+                    <input type="text" class="form-control" name="name" value="<?= $name ?>" required/>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 label-rigth" for="">ราคา</label>
+                <label class="col-sm-2 label-rigth" for="">อธิบาย</label>
                 <div class="col-sm-3">
-                    <input type="number" name="l_price" class="form-control" required/>
+                    <textarea name="desc" class="form-control" rows="3" required><?= $descrition ?></textarea>
                 </div>
             </div>
         </div>

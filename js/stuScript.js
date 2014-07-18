@@ -72,4 +72,21 @@ function datePickerBeTween() {
         }
     });
 }
+function deleteItem(id, url) {
+    if (confirm('ยืนยันการลบ รหัส: ' + id + " ใช่หรือไม่")) {
+        $.ajax({
+            url: url,
+            data: {id: id},
+            type: 'POST',
+            success: function(data) {
+                //alert(data);
+                if (data) {
+                    window.location.reload();
+                } else {
+                    alert('ลบไม่สำเร็จ เกิดข้อผิดพลาด');
+                }
+            }
+        });
+    }
+}
 
