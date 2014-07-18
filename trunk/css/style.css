@@ -192,3 +192,16 @@ input:focus + .help {
     padding: 5px;
     border-bottom: 1px red solid;
 }
+
+.label-rigth{
+    text-align: right;
+    font-size: medium;
+}
+.label-center{
+    text-align: center;   
+    font-size: medium;
+}
+.label-left{
+    text-align: left;
+    font-size: medium;
+}
