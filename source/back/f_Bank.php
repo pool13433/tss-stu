@@ -1,36 +1,39 @@
-<?php 
-    include '../../config/Database.php';
-    include '../../config/Html.php';
-    $db = new Database();
-    $html = new Html();
-    
-    // update 
-    
-    $db->select('bank', '*','bank_id ='.$_GET['id'] );
-    $result = $db->getResults();
+<?php
+include '../../config/connect.php';
+// ประกาศ ตัวแปร
+$id = "";
+$name = "";
+$detail = "";
+if (!empty($_GET['id'])) {
+    $sql_bank = "SELECT * FROM bank WHERE bank_id = " . $_GET['id'];
+    $query_bank = mysql_query($sql_bank) or die(mysql_error());
+    $r = mysql_fetch_assoc($query_bank);
+    $id = $r['bank_id'];
+    $name = $r['bank_name'];
+    $detail = $r['bank_detail'];
+}
 ?>
-<div class="box_header">
+<form class="form-horizontal" action="_bank.php?method=i" method="post">
+    <div class="panel panel-info">
+        <div class="panel-heading">จัดการธนาคาร</div>
+        <div class="panel-body">
 
-</div>
-<div class="box_body">
-    <form action="_bank.php?method=i" method="post">
-        <fieldset>
-            <legend></legend>
-            <table class="table table-striped">
-                <tbody>
-                    <tr>
-                        <td><label>ชื่อ ธนาคาร</label></td>
-                        <td>
-                            <input name="bank" class="form-control" type="text" value="<?php echo $result['bank_name'] != '' ? $result['bank_name'] : '' ?>"/>
-                            <input type="hidden" name="id" value="<?php echo$result['bank_id'];?>"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td><input type="submit" value="บันทึก" class="btn-success"/></td>
-                    </tr>
-                </tbody>
-            </table>
-        </fieldset>
-    </form>
-</div>
+            <div class="form-group">
+                <label class="col-sm-2 label-rigth" for="">ชื่อธนาคาร</label>
+                <div class="col-sm-3">
+                    <input type="hidden" class="form-control" name="id" value="<?= $id ?>"/>
+                    <input type="text" class="form-control" name="name" value="<?= $name ?>" required/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 label-rigth" for="">คำอธิบาย</label>
+                <div class="col-sm-3">
+                    <textarea name="detail" class="form-control" rows="3"><?= $detail ?></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer label-center">
+            <button class="btn btn-primary" onclick="return confirm('บันทึก')">บันทึก</button>
+        </div>
+    </div>
+</form>

@@ -1,82 +1,42 @@
-
-<html>
-    <head>
-        <title></title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <script type="text/javascript">
-            function e() {
-                $('#dialog_e').dialog({
-                    autoOpen: false,
-                });
-            }
-            function s() {
-                $('#dialog_s').dialog({
-                    autoOpen: false,
-                });
-            }
-        </script>
-    </head>
-    <body>
-        <div class="dialog_s"></div>
-        <div class="dialog_e"></div>
-    </body>
-</html>
 <?php
-include '../../config/Database.php';
-include '../../config/Html.php';
-$db = new Database();
-$html = new Html();
+
+include '../../config/connect.php';
+
 switch ($_GET['method']) {
-    case 'i': // *************************************************************** do insert 
-        if(empty($_POST['id'])) {  //insert
-            if (!empty($_POST['bank'])) {
-                echo "bank===>>" . $_POST['bank'];
-                $r = $db->insert('bank', array(
-                    '', $_POST['bank']
-                ));
-                if ($r) {
-                    $html->redirect('index.php?page=b');
-                } else {
-                    // $html->redirect('index.php?page=b');
-                    echo "save error";
-                }
-            } else {
-                echo '<script type="text/javascript">'
-                , 'alert("กรุณากรอกค่าให้ครบถ้วน");'
-                , '</script>';
-                $html->redirect('index.php?page=f-b');
+    case 'i': // insert 
+        if (!empty($_POST)) {
+
+            if (empty($_POST['id'])) { // insert
+                $sql_bank = "INSERT INTO bank (bank_id,bank_name,bank_detail)";
+                $sql_bank .= " VALUES(";
+                $sql_bank .= " ''";
+                $sql_bank .= " ,'" . $_POST['name'] . "'";
+                $sql_bank .= " ,'" . $_POST['detail'] . "'";
+                $sql_bank .= ")";
+            } else { // update
+                $sql_bank = "UPDATE bank SET ";
+                $sql_bank .= " bank_name='" . $_POST['name'] . "'";
+                $sql_bank .= " ,bank_detail = '" . $_POST['detail'] . "'";
+                $sql_bank .= " WHERE bank_id =" . $_POST['id'];
             }
-        } else {  // *********************************************************** do Update
-            if (isset($_POST['bank'])) {
-                
-                //echo $_POST['id'];
-                
-                $db->update('bank', array(
-                    'bank_name' => $_POST['bank'],
-                        ), array(
-                            'bank_id',$_POST['id']
-                        ));
-                $r = $db->getResults();
-                if ($r) {
-                    $html->redirect('index.php?page=b');
-                } else {
-                    // $html->redirect('index.php?page=b');
-                    echo 'update error';
-                }
+            //echo "<pre> sql: " . $sql_bank . "</pre>";
+            $query_bank = mysql_query($sql_bank) or die(mysql_error());
+            if ($query_bank) {
+                echo '<div style="background-color: yellowgreen;color: red;padding: 20px;font-size: large">Add New bank Success</div>';
+                echo '<META HTTP-EQUIV="refresh" CONTENT="1.5; URL=./index.php?page=b">';
             } else {
-                echo "Insert Error";
+                echo "alert('add bank fail !!');";
             }
         }
         break;
-    case 'd': // *************************************************************** do delete 
-        $id = $_POST['id'];
-        $r = $db->delete(
-                'bank', 'bank_id =' . $id);
-
+    case 'd': //delete
+        $sql_bank = "DELETE FROM bank";
+        $sql_bank .= " WHERE bank_id =" . $_POST['id'];
+        echo "<pre> sql: " . $sql_bank . "</pre>";
+        mysql_query($sql_bank) or die(mysql_error());
         return true;
         break;
     default:
         break;
 }
 ?>
-

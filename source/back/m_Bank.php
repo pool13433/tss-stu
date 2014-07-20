@@ -17,6 +17,7 @@ include '../../config/connect.php';
                 <tr>
                     <th>รหัส</th>
                     <th>ชื่อ</th>
+                    <th>คำอธิบาย</th>
                     <th>แก้ไข</th>
                     <th>ลบ</th>
                 </tr>
@@ -30,13 +31,14 @@ include '../../config/connect.php';
                     <tr>
                         <td><?php echo $r['bank_id']; ?></td>
                         <td><?php echo $r['bank_name']; ?></td>
+                        <td><?php echo $r['bank_detail']; ?></td>
                         <td>
                             <a class="btn btn-info" href="index.php?page=f-b&id=<?php echo $r['bank_id']; ?>">
                                 <i class="glyphicon glyphicon-pencil"></i> แก้ไข
                             </a>
                         </td>
                         <td>
-                            <button class="btn btn-danger" onclick="return delBank(<?= $r['bank_id']; ?>)">
+                            <button class="btn btn-danger" onclick="return deleteItem(<?= $r['bank_id']; ?>,'_bank.php?method=d')">
                                 <i class="glyphicon glyphicon-trash"></i> ลบ
                             </button>
                         </td>
@@ -54,21 +56,6 @@ include '../../config/connect.php';
                                     var oTable = tableGridPagination(5);
                                     oTable.fnSort([[0, 'asc']]); //, [1, 'desc']
                                 });
-                                function delBank(id) {
-                                    if (confirm('ยืนยันการลบ รหัส: ' + id + " ใช่หรือไม่")) {
-                                        $.ajax({
-                                            url: "_bank.php?method=d",
-                                            data: id,
-                                            success: function(data) {
-                                                if (data) {
-                                                    window.location.reload();
-                                                } else {
-                                                    alert('ลบไม่สำเร็จ เกิดข้อผิดพลาด');
-                                                }
-                                            }
-                                        });
-                                    }
-                                }
 </script>
 
 
