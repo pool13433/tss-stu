@@ -33,8 +33,8 @@ switch ($_GET['method']) {
         $sql_prefix = "DELETE FROM prefix";
         $sql_prefix .= " WHERE pref_id =" . $_POST['id'];
         echo "<pre> sql: " . $sql_prefix . "</pre>";
-        mysql_query($sql_prefix) or die(mysql_error());
-        return true;
+        $query =mysql_query($sql_prefix) or die(mysql_error());
+        echo $query;
         break;
     default:
         break;

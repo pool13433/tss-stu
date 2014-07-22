@@ -115,7 +115,7 @@
     padding-top: 10px;
     padding-left: 10px;
     padding-right: 10px;
-    
+
 }
 .box_img-header{
     border-bottom: 3px blue solid;
@@ -126,15 +126,15 @@
     font-family: sans-serif;
 }
 .box_img-body{
-   padding-top: 10px;
-   padding-bottom: 5px;
-   text-align: center;
-   border-bottom : 2px red solid;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    text-align: center;
+    border-bottom : 2px red solid;
 }
 .box_img-footer{
     padding-top: 5px;
     text-align: center;
-    
+
 }
 .box_img-body img{
     width: 90%;
@@ -172,7 +172,7 @@ textArea:invalid{
     background:hsl(0, 50%, 90%);
 }
 fieldset{
-    
+
 }
 fieldset legend{
     font-size: 25px;
@@ -186,7 +186,7 @@ input:focus + .help {
 }
 
 .li_post{
-    
+
 }
 .li_comment{
     padding: 5px;
@@ -204,4 +204,40 @@ input:focus + .help {
 .label-left{
     text-align: left;
     font-size: medium;
+}
+.img-size20x20{
+    max-height: 20px;
+    max-width: 20px;
+    min-height: 20px;
+    min-width: 20px;
+}
+.img-size40x40{
+    max-height: 40px;
+    max-width: 40px;
+    min-height: 40px;
+    min-width: 40px;
+}
+.img-size60x60{
+    max-height: 60px;
+    max-width: 60px;
+    min-height: 60px;
+    min-width: 60px;
+}
+.img-size80x80{
+    max-height: 80px;
+    max-width: 80px;
+    min-height: 80px;
+    min-width: 80px;;
+}
+.img-size100x100{
+    max-height: 100px;
+    max-width: 100px;
+    min-height: 100px;
+    min-width: 100px;
+}
+.img-size150x150{
+    max-height: 150px;
+    max-width: 150px;
+    min-height: 150px;
+    min-width: 150px;
 }

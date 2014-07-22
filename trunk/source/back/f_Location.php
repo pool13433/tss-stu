@@ -3,17 +3,17 @@ include '../../config/connect.php';
 // ประกาศ ตัวแปร
 $id = "";
 $name = "";
-$descrition = "";
+$price = "";
 if (!empty($_GET['id'])) {
-    $sql_prefix = "SELECT * FROM prefix WHERE pref_id = " . $_GET['id'];
-    $query_prefix = mysql_query($sql_prefix) or die(mysql_error());
-    $r = mysql_fetch_assoc($query_prefix);
-    $id = $r['pref_id'];
-    $name = $r['pref_name'];
-    $descrition = $r['pref_descrition'];
+    $sql_loca = "SELECT * FROM location WHERE loc_id = " . $_GET['id'];
+    $query_location = mysql_query($sql_loca) or die(mysql_error());
+    $r = mysql_fetch_assoc($query_location);
+    $id = $r['loc_id'];
+    $name = $r['loc_name'];
+    $price = $r['loc_price'];
 }
 ?>
-<form class="form-horizontal" action="_prefix.php?method=i" method="post">
+<form class="form-horizontal" action="_location.php?method=i" method="post">
     <div class="panel panel-info">
         <div class="panel-heading">ฟอร์ม คำนำหน้าชื่อ</div>
         <div class="panel-body">
@@ -28,7 +28,7 @@ if (!empty($_GET['id'])) {
             <div class="form-group">
                 <label class="col-sm-2 label-rigth" for="">ราคา</label>
                 <div class="col-sm-3">
-                    <input type="number" name="l_price" class="form-control" required/>
+                    <input type="number" name="l_price" class="form-control" value="<?= $price ?>" required/>
                 </div>
             </div>
         </div>

@@ -1,92 +1,50 @@
 <?php
-include '../../config/Database.php';
-include '../../config/Html.php';
-$db = new Database();
-$html = new Html();
+include '../../config/connect.php';
 
-// update 
-
-$db->select('product', '*', 'prod_id =' . $_GET['id']);
-$result = $db->getResults();
+$id = "";
+$code = "";
+$name = "";
+$price = "";
+$img = "required";
+if (!empty($_GET['id'])) {
+    $sql_product = "SELECT * FROM product WHERE prod_id = " . $_GET['id'];
+    $query_product = mysql_query($sql_product) or die(mysql_error());
+    $r = mysql_fetch_assoc($query_product);
+    $id = $r['prod_id'];
+    $code = $r['prod_code'];
+    $name = $r['prod_name'];
+    $price = $r['prod_price'];
+    $img = "";
+}
 ?>
-<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-<script src="http://jquery.bassistance.de/validate/jquery.validate.js"></script>
-<script src="http://jquery.bassistance.de/validate/additional-methods.js"></script>
-<script type="text/javascript">
-    $(function() {
-        $('#form :input').submit(function() {
-            var res = true;
-            // here I am checking for textFields, password fields, and any 
-            // drop down you may have in the form
-            $("input[type='text'],select,input[type='password']", this).each(function() {
-                if ($(this).val().trim() == "") {
-                    res = false;
-                    error();
-                }
-            });
-            return res; // returning false will prevent the form from submitting.
-        });
-    });
-     function error() {
-        $('.dialog').dialog({
-            height: 140,
-            modal: true,
-            buttons: {
-                "ลบ": function() {
-                    //$(this).dialog("close");
-                    sendAjax(id);
-                },
-                "ยกเลิก": function() {
-                    $(this).dialog("close");
-                }
-            }
-        });
-    }
-    // just for the demos, avoids form submit
-</script>
-<div class="box_header">
-    <span>กรุณากรอกข้อมูล</span>
-</div>
-<div class="box_body">
-    <form action="_product.php?method=i" id="form" method="post" enctype="multipart/form-data">
-        <fieldset>
-            <legend></legend>
-            <table class="table table-striped">
-                <tbody>
-                    <tr>
-                        <td><label>ชื่อ สินค้า</label></td>
-                        <td>
-                            <input name="p_name" class="form-control" type="text" value="<?php echo $result['prod_name'] != '' ? $result['prod_name'] : '' ?>"/>
-                            <input type="hidden" name="id" value="<?php echo$result['prod_id']; ?>"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><label>โค๊ด สินค้า</label></td>
-                        <td>
-                            <input name="p_code" class="form-control" type="text" value="<?php echo $result['prod_code'] != '' ? $result['prod_code'] : '' ?>"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><label>รูป สินค้า ["gif", "jpeg", "jpg", "png"]</label></td>
-                        <td>
-                            <input name="file" class="form-control" type="file" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><label>ราคา สินค้า</label></td>
-                        <td>
-                            <input name="p_price" class="form-control" type="text" value="<?php echo $result['prod_price'] != '' ? $result['prod_price'] : '' ?>"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td><input type="submit" value="บันทึก" class="btn-success"/></td>
-                    </tr>
-                </tbody>
-            </table>
-        </fieldset>
-    </form>
-</div>
-<div class="dialog" title="ยืนยันการลบ" style="visibility: hidden;">
-    <p>ยืนยันการลบ</p>
-</div>
+<form class="form-horizontal" method="post" action="_product.php?method=i" accept-charset="utf-8" enctype="multipart/form-data">
+    <div class="panel panel-info">
+        <div class="panel-heading">ฟอร์ม สินค้า</div>
+        <div class="panel-body">        
+            <div class="form-group">
+                <label class="col-sm-2 label-rigth">โค๊ด</label>
+                <div class="col-sm-3">
+                    <input type="hidden" class="form-control" name="id" value="<?= $id ?>"/>
+                    <input type="text" class="form-control" name="code" required value="<?= $code ?>"/>
+                </div>
+                <label class="col-sm-1 label-rigth">ชื่อ</label>
+                <div class="col-sm-3">
+                    <input type="text" class="form-control" name="name" required value="<?= $name ?>"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 label-rigth">รูป สินค้า ["gif", "jpeg", "jpg", "png"]</label>
+                <div class="col-sm-3">
+                    <input type="file" class="form-control" name="file" <?= $img ?> onchange="CheckFile(this)"/>
+                </div>
+                <label class="col-sm-1 label-rigth">ราคา</label>
+                <div class="col-sm-3">
+                    <input type="text" class="form-control" name="price" required value="<?= $price ?>"/>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer label-center">
+            <button class="btn btn-primary" onclick="return confirm('บันทึก')">บันทึก</button>
+        </div>
+    </div>
+</form>

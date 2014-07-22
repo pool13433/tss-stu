@@ -1,79 +1,56 @@
 <?php
-include '../../config/Database.php';
-$db = new Database();
-$db->select('package', '*', '1=1', 'pac_id asc');
-$result = $db->getResults();
+include '../../config/connect.php';
 ?>
+<div class="panel panel-warning">
+    <div class="panel-heading">
+        <span>รายการ package</span>
+    </div>
+    <div class="panel-body">
+        <table class="table table-bordered tablePagination">
+            <thead>
+                <tr>                    
+                    <th class="label-center" style="width: 20%">รูป package</th>
+                    <th class="label-center">ชื่อ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $sql_package = "SELECT * FROM package ORDER BY pac_id";
+                $query_package = mysql_query($sql_package) or die(mysql_error());
+                while ($r = mysql_fetch_array($query_package)) {
+                    ?>
+                    <tr>
+                        <td class="label-center">
+                            <img src="<?= PATH_PACKAGE . $r['pac_img'] ?>" class="img-thumbnail img-size150x150"/>
+                        </td>
+                        <td>
+                            <div class="jumbotron">
+                                <h1><?= $r['pac_name'] ?></h1>
+                                <p></p>
+                                <p> <a class="btn btn-primary btn-lg" href="index.php?page=o-pkd&id=<?= $r['pac_id'] ?>">
+                                        ดูรายละเอียด
+                                    </a></p>
+                            </div>
+
+                        </td>
+                    </tr>
+                    <?php
+                }
+                ?>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="2"></th>
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
 <script type="text/javascript">
-    $(function() {
-        $('.linkDialog').click(function() {
-            var id = $(this).attr('id');
-            var url = 'd_packageSet.php';
-
-            showUrlInDialog(url, id);
-        });
+    $(document).ready(function() {
+        var oTable = tableGridPagination(5);
+        oTable.fnSort([[0, 'asc']]); //, [1, 'desc']
     });
-    function showUrlInDialog(url, id) {
-        var tag = $("<div></div>");
-        $.ajax({
-            url: url,
-            type: "POST",
-            data: {
-                id: id,
-            },
-            success: function(data) {
-                tag.html(data).dialog({
-                    modal: true,
-                    width: 700,
-                    height: 500,
-                    position: ['center', 100],
-                    buttons: {
-                        "ปิดหน้าต่าง": function() {
-                            $(this).dialog("close");
-                            window.location = "index.php?page=o-pk";
-                        },
-                    }
-                }).dialog('open');
-            }
-        });
-    }
 </script>
-
-<div class="box_header">
-    <span>สินค้าทั้งหมดในตะกร้าที่ สั่งจอง</span>
-</div>
-<div class="box_body">
-    <table>
-        <?php
-        $index = 0;
-        foreach ($result as $r) {
-            if ($index == 0) {
-                echo "<tr>";
-            }
-            echo "<td>";
-            echo "<div class=\"box_img\">";
-            echo "<div class=\"box_img-header\">";
-            echo $r['pac_name'];
-            echo "</div>";
-            echo "<div class=\"box_img-body\">";
-            echo "<img src='" . $r['pac_img'] . "'>";
-            echo "</dvi>";
-            echo "<div class=\"box_img-footer\">";
-            echo "<a href=\"#\" class=\"linkDialog\" id='".$r['pac_id']."'>";
-            echo "<button id=\"btChoose\" class=\"btn-primary\">เลือก</button>";
-            echo "</a>";
-            echo "</div>";
-            echo "</div>";
-            echo "</td>";
-
-            if ($index == 3) {
-                echo "</tr>";
-            }
-            $index++;
-        }
-        ?>
-    </table>
-</div>
-<div class="dialog" title="เลือก" style="display: none;">
-    <p>เลือกจอง</p>
-</div>

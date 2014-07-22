@@ -1,133 +1,58 @@
 <?php
 include '../../config/connect.php';
 
+// ดึงรายการ สั่ง จอง ทั้งหมด ยกเว้น อันที่ ยกเลิก table order_header order_success != 2
 $sql = "SELECT * FROM order_header";
 $sql .= " WHERE pers_id = " . $_SESSION['id'];
+$sql .= " AND order_success <> 2 ";  // != 2
 $sql .= " ORDER BY order_id ASC";
 $query = mysql_query($sql) or die(mysql_error() . "sql ==>>" . $sql)
 ?>
-<script type="text/javascript">
-    $(function() {
-        $('.linkDialog').click(function() {
-            var id = $(this).attr('id');
-            var url = 'formPayment.php';
-
-            showUrlInDialog(url, id);
-        });
-        $('.btn-danger').click(function() {
-            
-            var id = $(this).attr('id');
-            //alert('id==>>>'+id);
-            $('#dialog').dialog({
-                height: 170,
-                modal: true,
-                position: ['center', 40],
-                buttons: {
-                    "ลบ": function() {
-                        //$(this).dialog("close");
-                        sendAjax(id);
-                    },
-                    "ยกเลิก": function() {
-                        $(this).dialog("close");
-                    }
-                }
-            });
-        });
-    });
-    function showUrlInDialog(url, id) {
-        var tag = $("<div></div>");
-        $.ajax({
-            url: url,
-            type: "POST",
-            data: {
-                id: id,
-            },
-            success: function(data) {
-                tag.html(data).dialog({
-                    modal: true,
-                    width: 850,
-                    height: 550,
-                    position: ['center', 100],
-                    buttons: {
-                        "ปิดหน้าต่าง": function() {
-                            $(this).dialog("close");
-                            window.location.reload();
-                        },
-                    }
-                }).dialog('open');
-            }
-        });
-    }
-    function sendAjax(id) {
-                $.ajax({
-                    url: "_order.php",
-                    type: "POST",
-                    data: {
-                        id: id,
-                    },
-                    success: function(data, textStatus, jqXHR)
-                    {
-                       // alert(data)
-                        if(data){
-                           window.location.reload();
-                        }else{
-                            alert('Delete fail');
-                        }
-                        
-                    },
-                    error: function(jqXHR, textStatus, errorThrown)
-                    {
-
-                    }
-                });
-            }
-</script>
-<div class="box_header">
-    <span>ใบรายการจองทั้งหมด</span>
-</div>
-<div class="box_body">
-    <div style="overflow:scroll;height: 600px;">
-        <table class="table table-striped">
+<div class="panel panel-warning">
+    <div class="panel-heading">
+        <span>ใบรายการจองทั้งหมด</span>
+    </div>
+    <div class="panel-body">
+        <table class="table table-bordered tablePagination">
             <thead>
                 <tr>
                     <th>รหัส</th>
                     <th>วันที่นัดหมาย</th>
                     <th>เวลาที่นัดหมาย</th>
-                    <th>ชาย</th>
-                    <th>หญิง</th>
                     <th>ยอดราคาสุทธิ</th>
                     <th>เงินมัดจำ</th>
                     <th>สถานะการจ่าย</th>
                     <th>สถานะการถ่ายภาพ</th>
-                    <th>วันที่สั่งจอง</th>
                     <th>พิมพ์</th>
                     <th>ชำระเงิน</th>
                     <th>ลบ</th>
                 </tr>
             </thead>
             <tbody>
-<?php
-while ($r = mysql_fetch_array($query)) {
-    ?>
+                <?php
+                while ($r = mysql_fetch_array($query)) {
+                    ?>
                     <tr>
-                        <td><a href="r_order.php?id=<?php echo $r['order_id'];?>" target="_blank"><?php echo $r['order_id'] ?></a></td>
+                        <td>
+                            <a href="index.php?page=od-d&id=<?php echo $r['order_id']; ?>" class="btn btn-info">
+                                <i class="glyphicon glyphicon-zoom-in"></i> <?php echo $r['order_id'] ?>
+                            </a>
+                        </td>
                         <td><?php echo $r['order_date'] ?></td>
                         <td><?php echo $r['order_time'] ?></td>
-                        <td><?php echo $r['order_number_fermale'] ?></td>
-                        <td><?php echo $r['order_number_male'] ?></td>
                         <td><?php echo $r['order_totalprice'] ?></td>
                         <td><?php echo $r['order_deposit'] ?></td>
                         <td>
                             <?php
                             switch ($r['order_status']) {
                                 case 0:
-                                    echo "<img src=\"../../images/icon/Information-icon.png\"/>_wait";
+                                    echo "<i class='glyphicon glyphicon-info-sign'></i>_wait";
                                     break;
                                 case 1:
-                                    echo "<img src=\"../../images/icon/Success-icon.png\"/>_pay";
+                                    echo "<i class='glyphicon glyphicon-ok-sign'></i>_success";
                                     break;
                                 case 2:
-                                    echo "<img src=\"../../images/icon/Error-icon.png\"/>_fail";
+                                    echo "<i class='glyphicon glyphicon-remove-sign'></i>_fail";
                                     break;
                                 default:
                                     break;
@@ -138,56 +63,89 @@ while ($r = mysql_fetch_array($query)) {
                             <?php
                             switch ($r['order_approve_status']) {
                                 case 0:
-                                    echo "<img src=\"../../images/icon/Information-icon.png\"/>_wait";
+                                    echo "<i class='glyphicon glyphicon-info-sign'></i>_wait";
                                     break;
                                 case 1:
-                                    echo "<img src=\"../../images/icon/Success-icon.png\"/>_success";
+                                    echo "<i class='glyphicon glyphicon-ok-sign'></i>_success";
                                     break;
                                 case 2:
-                                    echo "<img src=\"../../images/icon/Error-icon.png\"/>_fail";
+                                    echo "<i class='glyphicon glyphicon-remove-sign'></i>_fail";
                                     break;
                                 default:
-                                    echo "<img src=\"../../images/icon/Error-icon.png\"/>_error";
+                                    echo "<i class='glyphicon glyphicon-remove-sign'></i>_error";
                                     break;
                             }
                             ?>
                         </td>
-                        <td><?php echo $r['order_createdate'] ?></td>
                         <td>
-                            <?php if ($r['order_status']==1) {
-                                        echo "<a href='r_order.php?id=".$r['order_id']."' target=\"_blank\">
-                                            <img src=\"../../images/icon/Print-icon.png\"/>_พิมพ์
-                                            </a>";
-                                  } 
+                            <?php
+                            if ($r['order_status'] == 1) {
+                                ?>
+                                <a class="btn btn-success" href="#">
+                                    <i class="glyphicon glyphicon-print"></i> พิมพ์</a>
+                                <?php
+                            }
                             ?>
                         </td>
                         <td>
 
-                        <?php
-                        switch ($r['order_status']) {
-                            case 0:
+                            <?php
+                            if ($r['order_status'] == 0):
                                 ?>
-                                    <a href="#" class="linkDialog" id="<?php echo $r['order_id']; ?>">
-                                        <input  type="button"   class="btn-info" value="ชำระเงิน"/>
-                                    </a>
+                                <a href = "index.php?page=pm&id=<?= $r['order_id'] ?>" 
+                                   class = "btn btn-info" id = "<?php echo $r['order_id']; ?>">
+                                    <i class="glyphicon glyphicon-usd"></i>ชำระเงิน
+                                </a>
                                 <?php
-                                break;
-                            default:
-                                break;
-                        }
-                        ?>
+                            else:
+                                ?>
+                                <button class="btn btn-success" type="button">
+                                    <i class="glyphicon glyphicon-ok-sign"></i>  ชำระเงินแล้ว
+                                </button>
+                            <?php
+                            endif;
+                            ?>
                         </td>
                         <td>
-                            <button type="button" class="btn-danger" id="<?php echo $r['order_id']; ?>">ลบ</button>
+                            <?php if ($r['order_status'] != 1): ?>
+                                <button type="button" class="btn btn-danger"
+                                        onclick="return cancleOrder(<?= $r['order_id'] ?>)"
+                                        id="<?php echo $r['order_id']; ?>">
+                                    <i class="glyphicon glyphicon-trash"></i> ยกเลิกการจอง
+                                </button>
+                            <?php else: ?>
+                                <!-- จ่ายเงินไปแล้ว ยกเลิกไม่ได้ แล้ว-->
+                            <?php endif; ?>
                         </td>
                     </tr>
-    <?php
-}
-?>
+                    <?php
+                }
+                ?>
             </tbody>
         </table>
     </div>
 </div>
-<div id="dialog" title="ยืนยันการลบ" style="display: none;">
-    <p>ยืนยันการยกเลิกการสั่งจอง การถ่ายภาพ</p>
-</div>
+<script type="text/javascript">
+                                            $(document).ready(function() {
+                                                var oTable = tableGridPagination(10);
+                                                oTable.fnSort([[0, 'asc']]); //, [1, 'desc']
+                                            });
+                                            function cancleOrder(id) {
+                                                if (confirm('ยืนยันการลบ ใบสั่งจอง เลขที่ : [ ' + id + ' ] ใช่หรือไม่ ?')) {
+                                                    $.ajax({
+                                                        url: '_cart.php?method=c', // cancle order
+                                                        data: {id: id},
+                                                        type: 'POST',
+                                                        success: function(data) {
+                                                            //alert(data);
+                                                            if (data) {
+                                                                window.location.reload();
+                                                            } else {
+                                                                alert('เกิดข้อผิดพลาด ในการ ยกเลิก ใบสั่งจอง ' + data);
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                                return false;
+                                            }
+</script>

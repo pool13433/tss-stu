@@ -1,59 +1,40 @@
 <?php
-include '../../config/Database.php';
-include '../../config/Html.php';
-$db = new Database();
-$html = new Html();
+
+include '../../config/connect.php';
 
 switch ($_GET['method']) {
     case 'i': // *************************************************************** do insert 
-        if (empty($_POST['id'])) {  //insert
-            if (!empty($_POST['l_name'])||!empty($_POST['l_price'])) {
-                
-                $r = $db->insert('location', array(
-                    '', $_POST['l_name'],$_POST['l_price'], date('Y-m-d')
-                ));
-                if ($r) {
-                    $html->redirect('index.php?page=l');
-                } else {
-                    echo "save error";
-                }
-            } else {
-                echo '<script type="text/javascript">'
-                , 'alert("กรุณากรอกค่าให้ครบถ้วน");'
-                , '</script>';
-                $html->redirect('index.php?page=f-l');
+        if (!empty($_POST)) {
+
+            if (empty($_POST['id'])) { // insert
+                $sql_prefix = "INSERT INTO location (loc_id,loc_name,loc_price,loc_createdate)";
+                $sql_prefix .= " VALUES(";
+                $sql_prefix .= " ''";
+                $sql_prefix .= " ,'" . $_POST['l_name'] . "'";
+                $sql_prefix .= " ,'" . $_POST['l_price'] . "',NOW()";
+                $sql_prefix .= ")";
+            } else { // update
+                $sql_prefix = "UPDATE location SET ";
+                $sql_prefix .= " loc_name='" . $_POST['l_name'] . "'";
+                $sql_prefix .= " ,loc_price = '" . $_POST['l_price'] . "'";
+                $sql_prefix .= " WHERE loc_id =" . $_POST['id'];
             }
-        } else {  // *********************************************************** do Update
-            if (isset($_POST['bank'])) {
-
-                //echo $_POST['id'];
-
-                $db->update('bank', array(
-                    'bank_name' => $_POST['bank'],
-                        ), array(
-                    'bank_id', $_POST['id']
-                ));
-                $r = $db->getResults();
-                if ($r) {
-                    $html->redirect('index.php?page=b');
-                } else {
-                    // $html->redirect('index.php?page=b');
-                    echo 'update error';
-                }
+            //echo "<pre> sql: " . $sql_prefix . "</pre>";
+            $query_prefix = mysql_query($sql_prefix) or die(mysql_error());
+            if ($query_prefix) {
+                echo '<div style="background-color: yellowgreen;color: red;padding: 20px;font-size: large">Add New Location Success</div>';
+                echo '<META HTTP-EQUIV="refresh" CONTENT="1.5; URL=./index.php?page=l">';
             } else {
-                echo "Insert Error";
+                echo "alert('add prefix fail !!');";
             }
         }
         break;
     case 'd': // *************************************************************** do delete 
-        $id = $_POST['id'];
-        $r = $db->delete(
-                'location', 'loc_id =' . $id);
-
-        return true;
-        break;
-    default:
-        echo "method other";
+        $sql_loc = "DELETE FROM location";
+        $sql_loc .= " WHERE loc_id =" . $_POST['id'];
+        echo "<pre> sql: " . $sql_loc . "</pre>";
+        $query = mysql_query($sql_loc) or die(mysql_error());
+        echo $query;
         break;
 }
 ?>

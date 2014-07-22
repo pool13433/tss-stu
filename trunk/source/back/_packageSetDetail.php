@@ -1,65 +1,62 @@
 <?php
-include '../../config/Database.php';
-include '../../config/Html.php';
-$db = new Database();
-$html = new Html();
+
+include '../../config/connect.php';
 
 switch ($_GET['method']) {
     case 'i': // *************************************************************** do insert 
-        if (empty($_POST['id'])) {  //insert
-            if (!empty($_POST['packageSet'])||!empty($_POST['pksd1'])||!empty($_POST['pksd2'])||$_POST['pksd_no']) {
-                
-                // save new item 
-                
-                $r = $db->insert('package_set_detail', array(
-                    '', $_POST['packageSet'],$_POST['pksd1']."X".$_POST['pksd2'],$_POST['pksd_no'], date('Y-m-d')
-                ));
-                
-                // check 
-                
-                if ($r) {
-                    $html->redirect('index.php?page=pksd');
-                } else {
-                    echo "save error";
+        if (!empty($_POST)) {
+            if (empty($_POST['id'])) { // insert                
+                $arr_num = $_POST['num'];
+                $arr_size = $_POST['size'];
+                if (isset($_POST['num'])) {
+                    //foreach ($arr_num as $num) {
+                    for ($i = 0; $i < count($arr_num); $i++) {
+                        $sql_PackageSet = "INSERT INTO package_set_detail (pacset_id,setd_imgsize,setd_number,setd_createdate)";
+                        $sql_PackageSet .= " VALUES( ";
+                        $sql_PackageSet .= $_POST['pac_set'];
+                        $sql_PackageSet .= " ,'" . $arr_size[$i] . "'";
+                        $sql_PackageSet .= " ," . $arr_num[$i] . ",NOW()";
+                        $sql_PackageSet .= ")";
+                        //echo "<pre> sql: " . $sql_PackageSet . "</pre>";
+                        $query_packageSet = mysql_query($sql_PackageSet) or die(mysql_error());
+                    }
                 }
-                
-            } else {
-                echo '<script type="text/javascript">'
-                , 'alert("กรุณากรอกค่าให้ครบถ้วน");'
-                , '</script>';
-                $html->redirect('index.php?page=f-pksd');
+            } else { // update
+                $sql_PackageSet = "UPDATE package_set SET ";
+                $sql_PackageSet .= " pac_id = '" . $_POST['package'] . "'";
+                $sql_PackageSet .= " ,pacset_name = '" . $_POST['name'] . "'";
+                $sql_PackageSet .= " ,pacset_price = '" . $_POST['price'] . "'";
+                $sql_PackageSet .= " ,pacset_remark = '" . $_POST['remark'] . "'";
+                $sql_PackageSet .= " WHERE pacset_id =" . $_POST['id'];
             }
-        } else {  // *********************************************************** do Update
-            if (isset($_POST['bank'])) {
-
-                //echo $_POST['id'];
-
-                $db->update('bank', array(
-                    'bank_name' => $_POST['bank'],
-                        ), array(
-                    'bank_id', $_POST['id']
-                ));
-                $r = $db->getResults();
-                if ($r) {
-                    $html->redirect('index.php?page=b');
-                } else {
-                    // $html->redirect('index.php?page=b');
-                    echo 'update error';
-                }
+            //echo "<pre> sql: " . $sql_Package . "</pre>";
+            //$query_packageSet = mysql_query($sql_PackageSet) or die(mysql_error());
+            if ($query_packageSet) {
+                echo '<div style="background-color: yellowgreen;color: red;padding: 20px;font-size: large">Add New Product Success</div>';
+                echo '<META HTTP-EQUIV="refresh" CONTENT="1.5; URL=./index.php?page=pksd">';
             } else {
-                echo "Insert Error";
+                echo "alert('add prefix fail !!');";
             }
         }
         break;
-    case 'd': // *************************************************************** do delete 
-        $id = $_POST['id'];
-        $r = $db->delete(
-                'package_set_detail', 'setd_id =' . $id);
-
-        return true;
+    case 'a': // *************************************************************** do insert 
+        $sql_package = "INSERT INTO package_set_detail (pacset_id,setd_imgsize,setd_number,setd_createdate)";
+        $sql_package .= " VALUES ( ";
+        $sql_package .= $_POST['set_id'];
+        $sql_package .= " ," . $_POST['id'];
+        $sql_package .= " ," . $_POST['number'];
+        $sql_package .= " ,NOW()";
+        $sql_package .= " )";
+        //echo "<pre> sql: " . $sql_package . "</pre>";
+        $query_packageSetSetail = mysql_query($sql_package) or die(mysql_error());
+        echo $query_packageSetSetail;
         break;
-    default:
-        echo "method other";
+    case 'd': // *************************************************************** do delete 
+        $sql_package = "DELETE FROM package_set_detail";
+        $sql_package .= " WHERE setd_id =" . $_POST['id'];
+        //echo "<pre> sql: " . $sql_package . "</pre>";
+        $query_packageSetSetail = mysql_query($sql_package) or die(mysql_error());
+        echo $query_packageSetSetail;
         break;
 }
 ?>

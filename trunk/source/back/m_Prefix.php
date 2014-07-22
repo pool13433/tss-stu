@@ -11,7 +11,7 @@ include '../../config/connect.php';
         </div>
     </div>
     <div class="panel-body">
-        <table class="table table-striped tablePagination" 
+        <table class="table table-bordered tablePagination" 
                cellpadding="0" cellspacing="0" border="0">
             <thead>
                 <tr>

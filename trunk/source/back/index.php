@@ -7,12 +7,16 @@
         <title>ผู้ดูแลระบบ</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-        <link rel="stylesheet" href="../../css/style.css" type="text/css"/>
-
+        <link rel="stylesheet" href="../../css/style.css" type="text/css"/>        
+        <link rel="stylesheet" href="../../multiple-select-check/multiple-select.css" media="screen" type="text/css"/>
+        <link rel="stylesheet" href="../../select2/select2-bootstrap.css" media="screen" type="text/css"/>
+        <link rel="stylesheet" href="../../select2/select2.css" media="screen" type="text/css"/>
         <link rel="stylesheet" href="../../bootstrap/dist/css/bootstrap.css"/>
         <link rel="stylesheet" href="../../bootstrap/dist/css/bootstrap.min.css"/>
         <link rel="stylesheet" href="../../datatables/dataTables.css"/>
         <link rel="stylesheet" href="../../css/jquery-ui.css"/>
+
+        <link rel="stylesheet" href="../../multi-select/css/multi-select.css" media="screen" type="text/css"/>                      
 
         <script type="text/javascript" src="../../js/jquery-1.10.2.min.js"></script>
 
@@ -25,6 +29,10 @@
         <script type="text/javascript" src="../../datatables/jquery-DT-pagination.js"></script>
         <script type="text/javascript" src="../../js/stuScript.js"></script>
 
+        <script type="text/javascript" src="../../multiple-select-check/jquery.multiple.select.js"></script>
+        <script type="text/javascript" src="../../select2/select2.js"></script>
+        
+        <script type="text/javascript" src="../../multi-select/js/jquery.multi-select.js"></script>
 
     </head>
     <body style="margin-top: 30px">
@@ -92,8 +100,14 @@
                         case 'pre':
                             include './m_Prefix.php';
                             break;
-                         case 'f-pre':
+                        case 'f-pre':
                             include './f_Prefix.php';
+                            break;
+                        case 'size':
+                            include './m_Size.php';
+                            break;
+                        case 'f-size':
+                            include './f_Size.php';
                             break;
                         case 'f-od':
                             include '';

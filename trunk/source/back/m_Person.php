@@ -12,7 +12,7 @@ include '../../config/connect.php';
         </div>
     </div>
     <div class="panel-body">
-        <table class="table table-striped tablePagination" cellpadding="0" cellspacing="0" border="0">
+        <table class="table table-bordered tablePagination" cellpadding="0" cellspacing="0" border="0">
             <thead>
                 <tr>
                     <th>รหัส</th>
@@ -47,12 +47,12 @@ include '../../config/connect.php';
                             }
                             ?></td>
                         <td>
-                            <button class="btn btn-info">
+                            <a class="btn btn-info" href="index.php?page=f-m&id=<?= $row['pers_id'] ?>">
                                 <i class="glyphicon glyphicon-pencil"></i> แก้ไข
-                            </button>
+                            </a>
                         </td>
                         <td>
-                            <button class="btn btn-danger" onclick="return delPerson(<?= $row['pers_id'] ?>)">
+                            <button class="btn btn-danger" onclick="return deleteItem(<?= $row['pers_id'] ?>,'_person.php?method=d')">
                                 <i class="glyphicon glyphicon-trash"></i> ลบ
                             </button>
                         </td>
@@ -66,23 +66,8 @@ include '../../config/connect.php';
     <div class="panel-footer"></div>
 </div>
 <script type="text/javascript">
-    $(document).ready(function() {
-        var oTable = tableGridPagination(10);
-        oTable.fnSort([[0, 'asc']]); //, [1, 'desc']
-    });
-    function delPerson(id) {
-        if (confirm('ยืนยันการลบ รหัส: '+id+" ใช่หรือไม่")) {
-            $.ajax({
-                url: '_person.php?method=d',
-                data: id,
-                success: function(data) {
-                    if (data) {
-                        window.location.reload();
-                    } else {
-                        alert('ลบไม่สำเร็จ เกิดข้อผิดพลาด');
-                    }
-                }
-            });
-        }
-    }
+                                $(document).ready(function() {
+                                    var oTable = tableGridPagination(10);
+                                    oTable.fnSort([[0, 'asc']]); //, [1, 'desc']
+                                });                               
 </script>

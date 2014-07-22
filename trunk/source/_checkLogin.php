@@ -7,10 +7,10 @@ include '../config/connect.php';
 //check login
 $sql = "SELECT * FROM person ";
 $sql .= "WHERE pers_username ='" . trim($_POST['username']) . "'";
-$sql .= " AND pres_password = '" . trim($_POST['password']) . "'";
+$sql .= " AND pers_password = '" . trim($_POST['password']) . "'";
 $sql .= " LIMIT 0, 1";
 
-$query = mysql_query($sql) or die("sql==>>" . $sql);
+$query = mysql_query($sql) or die(mysql_error());
 
 $row = mysql_num_rows($query);
 
@@ -24,9 +24,9 @@ if ($row != 0) { // true have person in table
 
     $_SESSION['id'] = $r['pers_id'];
     $_SESSION['username'] = $r['pers_username'];
-    $_SESSION['password'] = $r['pres_password'];
+    $_SESSION['password'] = $r['pers_password'];
     $_SESSION['status'] = $r['persta_id'];
-
+    $_SESSION['object'] = $r;
 
     if (isset($_SESSION['id']) &&
             isset($_SESSION['username']) &&

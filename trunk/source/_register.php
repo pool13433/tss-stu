@@ -6,7 +6,7 @@ include '../config/connect.php';
 
 // สร้าง string sql
 $sql_regis = "INSERT INTO person ";
-$sql_regis .= " (pers_id,pref_id,prov_id,persta_id,pers_username,pres_password";
+$sql_regis .= " (pers_id,pref_id,prov_id,persta_id,pers_username,pers_password";
 $sql_regis .= " ,pers_fname,pers_lname,pers_idcard,pers_birthday,pers_address";
 $sql_regis .= " ,pers_alley,pers_district,pers_prefecture,pers_postcode,pers_phone";
 $sql_regis .= " ,pers_email,pers_active,pers_createdate) VALUES(";

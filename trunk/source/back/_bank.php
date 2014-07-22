@@ -33,8 +33,8 @@ switch ($_GET['method']) {
         $sql_bank = "DELETE FROM bank";
         $sql_bank .= " WHERE bank_id =" . $_POST['id'];
         echo "<pre> sql: " . $sql_bank . "</pre>";
-        mysql_query($sql_bank) or die(mysql_error());
-        return true;
+        $query = mysql_query($sql_bank) or die(mysql_error());
+        echo $query;
         break;
     default:
         break;
