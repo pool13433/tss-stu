@@ -1,5 +1,5 @@
-<div class="box" style="">
-    <div class="box_menu_top">
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
         <ul class="nav nav-pills">
             <li><a href="index.php?page=i-i">หน้าหลัก</a></li>
             <li><a href="index.php?page=i-a">อัลบัมลูกค้า</a></li>
@@ -9,4 +9,5 @@
             <li><a href="index.php?page=i-h">ช่วยเหลือ</a></li>
         </ul>
     </div>
-</div>
+</nav>
+

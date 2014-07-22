@@ -11,7 +11,7 @@ include '../../config/connect.php';
         </div>
     </div>
     <div class="panel-body">
-        <table class="table table-striped tablePagination" cellpadding="0" cellspacing="0" border="0">
+        <table class="table table-bordered tablePagination" cellpadding="0" cellspacing="0" border="0">
             <thead>
                 <tr>
                     <th>รหัส</th>
@@ -32,18 +32,18 @@ include '../../config/connect.php';
                     <tr>
                         <td><?= $row['prod_id'] ?></td>
                         <td>
-                            <img src="<?= $row['prod_img'] ?>" class="img-thumbnail">
+                            <img src="<?= PATH_PRODUCT . $row['prod_img'] ?>" class="img-thumbnail img-size60x60">
                         </td>
                         <td><?= $row['prod_code'] ?></td>
                         <td><?= $row['prod_name'] ?></td>
                         <td><?= $row['prod_price'] ?></td>
                         <td>
-                            <button class="btn btn-info">
+                            <a class="btn btn-info" href="index.php?page=f-p&id=<?= $row['prod_id'] ?>">
                                 <i class="glyphicon glyphicon-pencil"></i> แก้ไข
-                            </button>
+                            </a>
                         </td>
                         <td>
-                            <button class="btn btn-danger" onclick="return delProduct(<?= $row['prod_id'] ?>)">
+                            <button class="btn btn-danger" onclick="return deleteItem(<?= $row['prod_id'] ?>, '_product.php?method=d')">
                                 <i class="glyphicon glyphicon-trash"></i> ลบ
                             </button>
                         </td>
@@ -61,19 +61,4 @@ include '../../config/connect.php';
                                     var oTable = tableGridPagination(10);
                                     oTable.fnSort([[0, 'asc']]); //, [1, 'desc']
                                 });
-                                function delProduct(id) {
-                                    if (confirm('ยืนยันการลบ รหัส: ' + id + " ใช่หรือไม่")) {
-                                        $.ajax({
-                                            url: "_product.php?method=d",
-                                            data: id,
-                                            success: function(data) {
-                                                if (data) {
-                                                    window.location.reload();
-                                                } else {
-                                                    alert('ลบไม่สำเร็จ เกิดข้อผิดพลาด');
-                                                }
-                                            }
-                                        });
-                                    }
-                                }
 </script>

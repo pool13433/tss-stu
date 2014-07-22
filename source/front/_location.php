@@ -1,43 +1,57 @@
 <?php
+@ob_start();
+@session_start();
+include '../../config/connect.php';
+if (!empty($_POST)) {
+    // update fname and lname 
+    $sql_person = "UPDATE person SET ";
+    $sql_person .= " pers_fname = '" . $_POST['fname'] . "'";
+    $sql_person .= " ,pers_lname = '" . $_POST['lname'] . "'";
+    $sql_person .= " WHERE pers_id = " . $_SESSION['id'];
+    mysql_query($sql_person) or die(mysql_error());
 
-include '../../config/Database.php';
-$db = new Database();
+    // update order_head
+    $sql_orderhead = "UPDATE order_header SET ";
+    $sql_orderhead .= " order_date = '" . $_POST['day'] . "'";
+    $sql_orderhead .= " ,order_time = '" . $_POST['time1'] . "-" . $_POST['time2'] . "'";
+    $sql_orderhead .= " ,order_number_fermale = " . $_POST['female'];
+    $sql_orderhead .= " ,order_number_male =" . $_POST['male'];
+    $sql_orderhead .= " ,order_totalprice = " . $_POST['price'];
+    $sql_orderhead .= " ,order_deposit = " . $_POST['deposit'];
+    $sql_orderhead .= " ,order_createdate = NOW()";
+    $sql_orderhead .= " ,order_success = 1";
+    $sql_orderhead .= " WHERE order_id =" . $_SESSION['order_id'];
 
-// save date = ไป อัพเดทข้อมูล การสั่งจอง ตาราง ชื่อ order_header
-
-
-$arrOrder = $_POST['arrOrder'];
-
-
-$i = $db->update('order_header', array(
-    'order_date' => $arrOrder[3],
-    'order_time' => $arrOrder[4],
-    'order_number_fermale' => intval($arrOrder[5]),
-    'order_number_male' => intval($arrOrder[6]),
-    'order_totalprice' => intval($arrOrder[7]),
-    'order_deposit' => intval($arrOrder[8]),
-    'order_status' => 0,
-    'order_approve_status' => 0,
-    'order_createdate' => date('Y-m-d'),
-    'order_success' => 'T',  // update ตะกร้า true
-        ), array(
-    'order_id', intval($arrOrder[0])
-        ));
-        //echo "<script>alert('update order');</script>";
-if ($i) {
-    // save data = ไปเพิ่มข้อมูลการเลือกจอง สถานที่ ตาราง ชื่อ order_location
-    $arrLoc = $_POST['arrLocation'];
-    foreach ($arrLoc as $r) {
-        $r = $db->insert('order_location', array(
-            '', $arrOrder[0], $r, date('Y-m-d'), ''
-        ));
+    //insert order_location 
+    $arrLocation = $_POST['location'];
+    //var_dump($arrLocation);
+    foreach ($arrLocation as $loc) {
+        $sql_localtion = "INSERT INTO order_location (order_id,loc_id,order_lo_createdate)";
+        $sql_localtion .= " VALUES ( ";
+        $sql_localtion .= $_SESSION['order_id'];
+        $sql_localtion .= " , " . $loc;
+        $sql_localtion .= " ,NOW()";
+        $sql_localtion .= " )";
+        mysql_query($sql_localtion) or die(mysql_error());
     }
-    
-    // ล้าง ค่า ตะกร้า อันเก่า
-    unset($_SESSION['order_id']);
-    echo json_encode($r);
-} else {
-    //echo "<script>alert('save location fail');</script>";
-    echo json_encode(false);
+    //echo '<pre> sql : ' . $sql_orderhead . '</pre>';
+    $query_orderhead = mysql_query($sql_orderhead) or die(mysql_error());
+    if ($query_orderhead) {
+        unset($_SESSION['order_id']);
+        echo '<div style="background-color: yellowgreen;color: red;padding: 20px;font-size: large">Confirm Order Succes กรุณา รอการ อนุมัติ</div>';
+        echo '<META HTTP-EQUIV="refresh" CONTENT="1.5; URL=./index.php?page=od">';
+    } else {
+        echo "alert('Confirm Order fail !!');";
+    }
 }
 ?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <body>
+
+    </body>
+</html>

@@ -77,7 +77,7 @@
                                     break;
                             }
                         } else {
-                            include './Login.php';
+                             include './Home.php';
                         }
                         ?>
                     </div>

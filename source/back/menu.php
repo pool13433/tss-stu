@@ -25,7 +25,7 @@
             <li><a href="index.php?page=l">สถานที่</a></li>
             <li class="divider"></li>
             <li><a href="index.php?page=pre">คำนำหน้าชื่อ</a></li>
-            <li class="divider"></li>
+            <li><a href="index.php?page=size">ขนาดรูป</a></li>
             <li><a href="index.php?page=b">ธนาคาร</a></li>
             <li><a href="index.php?page=img">อัลบัมรูป</a></li>
             <li class="divider"></li>

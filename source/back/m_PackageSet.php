@@ -1,5 +1,11 @@
 <?php
 include '../../config/connect.php';
+
+if (!empty($_GET['id'])) {
+    $sql_packageSet = "SELECT * FROM package_set WHERE pacset_id = " . $_GET['id'];
+    $query_packageSet = mysql_query($sql_packageSet) or die(mysql_error());
+    $r = mysql_fetch_assoc($query_packageSet);
+}
 ?>
 
 <div class="panel panel-info">
@@ -12,7 +18,7 @@ include '../../config/connect.php';
         </div>
     </div>
     <div class="panel-body">
-        <table class="table table-striped tablePagination" 
+        <table class="table table-bordered tablePagination" 
                cellpadding="0" cellspacing="0" border="0">
             <thead>
                 <tr>
@@ -44,7 +50,7 @@ include '../../config/connect.php';
                             </a>
                         </td>
                         <td>
-                            <button class="btn btn-danger" onclick="return delPackageSet(<?= $r['pacset_id']; ?>)">
+                            <button class="btn btn-danger" onclick="return deleteItem(<?= $r['pacset_id']; ?>, '_packageSet.php?method=d')">
                                 <i class="glyphicon glyphicon-trash"></i> ลบ
                             </button>
                         </td>
@@ -58,23 +64,8 @@ include '../../config/connect.php';
     <div class="panel-footer"></div>
 </div>
 <script type="text/javascript">
-                                $(document).ready(function() {
-                                    var oTable = tableGridPagination(5);
-                                    oTable.fnSort([[0, 'asc']]); //, [1, 'desc']
-                                });
-                                function delPackageSet(id) {
-                                    if (confirm('ยืนยันการลบ รหัส: ' + id + " ใช่หรือไม่")) {
-                                        $.ajax({
-                                            url: "_packageSet.php?method=d",
-                                            data: id,
-                                            success: function(data) {
-                                                if (data) {
-                                                    window.location.reload();
-                                                } else {
-                                                    alert('ลบไม่สำเร็จ เกิดข้อผิดพลาด');
-                                                }
-                                            }
-                                        });
-                                    }
-                                }
+                            $(document).ready(function() {
+                                var oTable = tableGridPagination(5);
+                                oTable.fnSort([[0, 'asc']]); //, [1, 'desc']
+                            });
 </script>

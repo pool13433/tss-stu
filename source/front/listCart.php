@@ -1,124 +1,10 @@
 <?php
 @ob_start();
 @session_start();
-include '../../config/Database.php';
-$db = new Database();
+include '../../config/connect.php';
 $date = date('Y-m-d');
 ?>
-<script type="text/javascript">
-    $(function() {
-        var total = 0;
-        $('INPUT.box_price').each(function() {
-            var price = $(this).val();
-            total = total + parseFloat(price);
-        });
-        $('#total').val(total);
-        $("button[name=delpro]").click(function() {
-            $('.dialog_con').dialog({
-                height: 140,
-                modal: true,
-                position: ['center', 100],
-                buttons: {
-                    "ลบ": function() {
-                        $(this).dialog("close");
-                        var typeItem = 'item_pro';
-                        var url = "_cart.php?method=d";
-                        var id = $("button[name=delpro]").attr("id");
-                        sendAjax(url, id, typeItem);
-                    },
-                    "ยกเลิก": function() {
-                        $(this).dialog("close");
-                    }
-                }
-            });
-        });
 
-        $("button[name=delpac]").click(function() {
-            $('.dialog_con').dialog({
-                height: 140,
-                modal: true,
-                position: ['center', 100],
-                buttons: {
-                    "ลบ": function() {
-                        $(this).dialog("close");
-                        var typeItem = 'item_pac';
-                        var url = "_cart.php?method=d";
-                        var id = $("button[name=delpac]").attr("id");
-                        sendAjax(url, id, typeItem);
-                    },
-                    "ยกเลิก": function() {
-                        $(this).dialog("close");
-                    }
-                }
-            });
-        });
-        $('#btChooseLocation').click(function() {
-            // ตรวตชจสอบ การ เลือกสินค้า ก่อนการไปเลือกสถานที่
-            if ($('#orderId').val() != "" && $('#total').val() !=0) {
-                var total = $('#total').val();
-                var url = 'd_location.php';
-
-                showUrlInDialog(url, total);
-            } else {
-                $('#dialog_fail').dialog({
-                    height: 200,
-                    modal: true,
-                    position: ['center', 100],
-                    buttons: {
-                        "OK": function() {
-                            $(this).dialog("close");
-                        }
-                    }
-                });
-            }
-
-        });
-    });
-    function sendAjax(url, id, type) {
-
-        $.ajax({
-            url: url,
-            type: "POST",
-            data: {
-                id: id,
-                typeItem: type,
-            },
-            success: function(data, textStatus, jqXHR)
-            {
-                // alert(data);
-                window.location.reload();
-            },
-            error: function(jqXHR, textStatus, errorThrown)
-            {
-
-            }
-        });
-    }
-    function showUrlInDialog(url, total) {
-        var tag = $("<div></div>");
-        $.ajax({
-            url: url,
-            type: "POST",
-            data: {
-                total: total,
-            },
-            success: function(data) {
-                tag.html(data).dialog({
-                    modal: true,
-                    width: 900,
-                    height: 600,
-                    position: ['center', 10],
-                    buttons: {
-                        "ปิดหน้าต่าง": function() {
-                            $(this).dialog("close");
-                            window.location.reload();
-                        },
-                    }
-                }).dialog('open');
-            }
-        });
-    }
-</script>
 <div class="panel panel-primary">
     <div class="panel-heading">
         <h3 class="panel-title">สินค้าที่เลือก</h3>
@@ -126,119 +12,214 @@ $date = date('Y-m-d');
     <div class="panel-body">
         <ul class="list-group">
             <li class="list-group-item">
-                <span class="badge"><?php echo $_SESSION['id'] ?></span>
+                <span class="badge alert-info" style="font-size: larger">
+                    <?php echo $_SESSION['username'] ?>
+                </span>
                 ผู้สั่งจอง
             </li>
             <li class="list-group-item">
-                <span class="badge"><input type="text" id="orderId" value="<?php echo $_SESSION['order_id'] ?>" readonly="true"/></span>
+                <span class="badge alert-info" style="font-size: larger">
+                    <?php
+                    if (!empty($_SESSION['order_id'])) {
+                        echo $_SESSION['order_id'];
+                    } else {
+                        echo "ตะกร้า ว่าง";
+                    }
+                    ?>
+                </span>
                 รหัสของใบสั่งจอง
             </li>
             <li class="list-group-item">
-                <span class="badge"><input type="text" id="total" readonly="true"/></span>
+                <span class="badge alert-info">
+                    <?php
+                    $total = 0;
+                    if (!empty($_SESSION['order_id']))
+                        $total = sumTotal($_SESSION['order_id']);
+                    ?>
+                    <input type="text" class="form-control" id="total" value="<?= $total ?>" readonly="true"/>
+                </span>
                 ราคารวม
             </li>
         </ul>
-        <div class="box_header">
-            <span>แพ็กเก็ต ทั้งหมด</span>
-        </div>
-        <div class="box_body">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>รหัสแพ็คเก็ต</th>
-                        <th>ชื่อ</th>
-                        <th>ราคา</th>
-                        <th>ลบ</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    $sql = "SELECT * FROM order_package AS o,package_set AS p,order_header AS h";
-                    $sql .= " WHERE h.order_id = o.cart_id";
-                    $sql .= " AND h.order_success = 'F'";
-                    $sql .= " AND o.pers_id =" . $_SESSION['id'];
-                    $sql .= " AND o.temp_createdate LIKE '" . $date . "'";
-                    $sql .= " AND o.pack_id = p.pacset_id";
-                    $sql .= " ORDER BY o.temp_id ASC ";
-                    $query = mysql_query($sql) or die(mysql_error() . "sql==>>" . $sql);
-                    while ($r = mysql_fetch_array($query)) {
-                        ?>
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <span>แพ็กเก็ต ทั้งหมด</span>
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered">
+                    <thead>
                         <tr>
-                            <td><?php echo$r['pack_id'] ?></td>
-                            <td>
-                                <?php
-                                echo $r['pacset_name'];
-                                ?>
-                            </td>
-                            <td>
-                                <input class="box_price" value="<?php echo $r['pacset_price'] ?>" readonly="true"/>
-                            </td>
-                            <td>
-                                <button class="btn-warning" name="delpac" id="<?php echo $r['temp_id'] ?>">ลบ</button>
-                            </td>
+                            <th style="width: 10%">รหัสแพ็คเก็ต</th>
+                            <th>ชื่อ</th>
+                            <th style="width: 15%">ราคา</th>
+                            <th style="width: 10%">ลบ</th>
                         </tr>
+                    </thead>
+                    <tbody>
                         <?php
-                    }
-                    ?>
-                </tbody>
-            </table>
-        </div>
-        <hr/>
-        <div class="box_header">
-            <span>สินค้า ทั้งหมด</span>
-        </div>
-        <div class="box_body">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>รหัสสินค้า</th>
-                        <th>ชื่อ</th>
-                        <th>ราคา</th>
-                        <th>ลบ</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    $sql = "SELECT * FROM order_product AS o,product AS p,order_header AS h";
-                    $sql .= " WHERE h.order_id = o.cart_id";
-                    $sql .= " AND h.order_success = 'F'";
-                    $sql .= " AND o.pers_id =" . $_SESSION['id'];
-                    $sql .= " AND o.temp_createdate LIKE '" . $date . "'";
-                    $sql .= " AND p.prod_id  = o.prod_id ";
-                    $sql .= " ORDER BY o.temp_id ASC";
-                    $query = mysql_query($sql) or die(mysql_error() . $sql);
-                    while ($r = mysql_fetch_array($query)) {
-                        ?>
-                        <tr>
-
-                            <td><?php echo$r['prod_id'] ?></td>
-                            <td>
-                                <?php
-                                echo $r['prod_name'];
+                        $sql = "SELECT * FROM order_package AS o,package_set AS p,order_header AS h";
+                        $sql .= " WHERE h.order_id = o.cart_id";
+                        $sql .= " AND h.order_success = 0";
+                        $sql .= " AND o.pers_id =" . $_SESSION['id'];
+                        $sql .= " AND o.temp_createdate LIKE '" . $date . "'";
+                        $sql .= " AND o.pack_id = p.pacset_id";
+                        $sql .= " ORDER BY o.temp_id ASC ";
+                        $query = mysql_query($sql) or die(mysql_error() . "sql==>>" . $sql);
+                        $record = mysql_num_rows($query);
+                        if ($record > 0) {
+                            while ($r = mysql_fetch_array($query)) {
                                 ?>
-                            </td>
-                            <td>
-                                <input class="box_price" value="<?php echo $r['prod_price'] ?>" readonly="true"/>
-                            </td>
-                            <td>
-                                <button class="btn-danger" name="delpro" id="<?php echo $r['temp_id'] ?>">ลบ</button>
-                            </td>
-                        </tr> 
-                        <?php
-                    }
-                    ?>
-                </tbody>
-            </table>
+                                <tr>
+                                    <td><?php echo$r['pack_id'] ?></td>
+                                    <td>
+                                        <?php
+                                        echo $r['pacset_name'];
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <input class="box_price form-control" value="<?php echo $r['pacset_price'] ?>" readonly="true"/>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-danger"
+                                                onclick="return deleteItem(<?= $r['temp_id'] ?>, 'item_pac')">
+                                            <i class="glyphicon glyphicon-trash"></i> ลบ
+                                        </button>
+                                    </td>
+                                </tr>
+                                <?php
+                            }
+                        } else {
+                            ?>
+                            <tr>
+                                <td colspan="4">-- ไม่มีสินค้า --</td>
+                            </tr>
+                            <?php
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <hr/>
-        <div style="text-align:center; ">
-            <button id="btChooseLocation" class="btn-primary">ไปเลือกสถานที่ถ่าย</button>
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <span>สินค้า ทั้งหมด</span>
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th style="width: 10%">รหัสสินค้า</th>
+                            <th>ชื่อ</th>
+                            <th style="width: 15%">ราคา</th>
+                            <th style="width: 10%">ลบ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $sql = "SELECT * FROM order_product AS o,product AS p,order_header AS h";
+                        $sql .= " WHERE h.order_id = o.cart_id";
+                        $sql .= " AND h.order_success = 0";
+                        $sql .= " AND o.pers_id =" . $_SESSION['id'];
+                        $sql .= " AND o.temp_createdate LIKE '" . $date . "'";
+                        $sql .= " AND p.prod_id  = o.prod_id ";
+                        $sql .= " ORDER BY o.temp_id ASC";
+                        $query_orderproduct = mysql_query($sql) or die(mysql_error() . $sql);
+                        $record1 = mysql_num_rows($query_orderproduct);
+                        if ($record1 > 0) {
+                            while ($r = mysql_fetch_array($query_orderproduct)) {
+                                ?>
+                                <tr>
+                                    <td><?= $r['prod_id'] ?></td>
+                                    <td>
+                                        <?= $r['prod_name'] ?>
+                                    </td>
+                                    <td>
+                                        <input class="box_price form-control" 
+                                               value="<?= $r['prod_price'] ?>" readonly="true"/>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-danger"
+                                                onclick="return deleteItem(<?= $r['temp_id'] ?>, 'item_pro')">
+                                            <i class="glyphicon glyphicon-trash"></i> ลบ
+                                        </button>
+                                    </td>
+                                </tr> 
+                                <?php
+                            }
+                        } else {
+                            ?>
+                            <tr>
+                                <td colspan="4"> -- ไม่มีสินค้า -- </td>
+                            </tr>
+                            <?php
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <hr/>
+        <div style="text-align:right; ">
+            <a id="btChooseLocation" href="index.php?page=lo" class="btn btn-primary">
+                <i class="glyphicon glyphicon-arrow-right"></i> ไปเลือกสถานที่ถ่าย
+            </a>
         </div>
     </div>
 </div>
-<div class="dialog_con" title="ยืนยันการลบ"></div>
-<div class="dialog_suc" title="ลบสำเร็จ"></div>
-<div id="dialog_fail" title="เลือกสินค้าก่อน" style="display: none;">
-    <p>กรุณาเลือกสินค้าก่อน</p>
-    <p>ถึงจะเลือก สถานที่ถ่ายทำได้</p>
-</div>
+<script type="text/javascript">
+                                            function deleteItem(id, type) {
+                                                if (confirm('ยืนยันการลบ item รหัส: [ ' + id + ' ] ใช่หรือไม่')) {
+                                                    $.ajax({
+                                                        url: '_cart.php?method=d',
+                                                        type: "POST",
+                                                        data: {
+                                                            id: id,
+                                                            typeItem: type,
+                                                        },
+                                                        success: function(data) {
+                                                            // alert(data);
+                                                            if (data) {
+                                                                window.location.reload();
+                                                            } else {
+                                                                alert('delete item fail');
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                                return false;
+                                            }
+</script>
+
+<?php
+
+function sumTotal($id) {
+    $num_pac = 0;
+    $num_pro = 0;
+    $sql_pac = "SELECT sum(`pacset_price`) as sumorder_package FROM order_package op";
+    $sql_pac .= " JOIN package_set pks ON pks.pacset_id = op.pack_id ";
+    $sql_pac .= " WHERE op.cart_id = " . $id;
+//echo "<pre> sql: ".$sql_pac."</pre>";
+    $query_pac = mysql_query($sql_pac) or die(mysql_error());
+    $r_pac = mysql_fetch_assoc($query_pac);
+
+    $num_pac = $r_pac['sumorder_package'];
+
+//var_dump($num_pac);
+
+    $sql_pro = "SELECT sum(`prod_price`) as sumorder_product FROM order_product op";
+    $sql_pro .= " JOIN product pd ON op.prod_id = pd.prod_id";
+    $sql_pro .= " WHERE op.cart_id = " . $id;
+
+//echo "<pre> sql: ".$sql_pro."</pre>";
+    $query_pro = mysql_query($sql_pro) or die(mysql_error());
+    $r_pro = mysql_fetch_assoc($query_pro);
+
+    $num_pro = $r_pro['sumorder_product'];
+
+//var_dump($num_pro);
+//echo "<pre> sum:" . intval($num_pac) + intval($num_pro) . "</pre>";
+    $_SESSION['total_price'] = intval($num_pac) + intval($num_pro);
+    return number_format(intval($num_pac) + intval($num_pro), 2, '.', ',');
+}
+?>

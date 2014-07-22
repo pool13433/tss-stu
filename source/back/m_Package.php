@@ -11,7 +11,7 @@ include '../../config/connect.php';
         </div>
     </div>
     <div class="panel-body">
-        <table class="table table-striped tablePagination" 
+        <table class="table table-bordered tablePagination" 
                cellpadding="0" cellspacing="0" border="0">
             <thead>
                 <tr>
@@ -31,7 +31,7 @@ include '../../config/connect.php';
                     <tr>
                         <td><?php echo $r['pac_id']; ?></td>
                         <td>
-                            <img class="img-thumbnail" src="<?php echo $r['pac_img'] ?>"/>
+                            <img class="img-thumbnail img-size80x80" src="<?= PATH_PACKAGE . $r['pac_img'] ?>"/>
                         </td>
                         <td><?php echo $r['pac_name']; ?></td>
                         <td>
@@ -40,7 +40,7 @@ include '../../config/connect.php';
                             </a>
                         </td>
                         <td>
-                            <button class="btn btn-danger" onclick="return delPackage(<?= $r['pac_id']; ?>)">
+                            <button class="btn btn-danger" onclick="return deleteItem(<?= $r['pac_id']; ?>, '_package.php?method=d')">
                                 <i class="glyphicon glyphicon-trash"></i> ลบ
                             </button>
                         </td>
@@ -58,21 +58,6 @@ include '../../config/connect.php';
                                     var oTable = tableGridPagination(5);
                                     oTable.fnSort([[0, 'asc']]); //, [1, 'desc']
                                 });
-                                function delPackage(id) {
-                                    if (confirm('ยืนยันการลบ รหัส: ' + id + " ใช่หรือไม่")) {
-                                        $.ajax({
-                                            url: "_package.php?method=d",
-                                            data: id,
-                                            success: function(data) {
-                                                if (data) {
-                                                    window.location.reload();
-                                                } else {
-                                                    alert('ลบไม่สำเร็จ เกิดข้อผิดพลาด');
-                                                }
-                                            }
-                                        });
-                                    }
-                                }
 </script>
 
 
